@@ -28,5 +28,6 @@ public class ProdutoModelResponse {
 	private UUID idProduto;
 	private String nome;
 	private BigDecimal preco;
+	private String imagem;
 
 }

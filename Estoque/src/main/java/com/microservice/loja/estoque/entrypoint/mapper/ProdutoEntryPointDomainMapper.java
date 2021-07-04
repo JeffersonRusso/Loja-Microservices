@@ -1,7 +1,6 @@
 package com.microservice.loja.estoque.entrypoint.mapper;
 
-import java.util.UUID;
-
+import com.microservice.loja.estoque.entrypoint.model.request.ProdutoModelRequest;
 import com.microservice.loja.estoque.usecase.model.request.ProdutoDomainRequest;
 
 /**
@@ -18,9 +17,9 @@ public class ProdutoEntryPointDomainMapper {
 	 */
 	private ProdutoEntryPointDomainMapper() {}
 	
-	public static ProdutoDomainRequest fromDomain(UUID idProduto) {
+	public static ProdutoDomainRequest fromDomain(ProdutoModelRequest produtoModelRequest) {
 		return ProdutoDomainRequest.builder()
-				.idProduto(idProduto)
+				.idProduto(produtoModelRequest.getIdProduto())
 				.build();
 	}
 }
