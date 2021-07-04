@@ -1,11 +1,12 @@
 package com.microservice.loja.estoque.entrypoint.model.request;
 
-import java.util.UUID;
-
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Setter
+@Getter
+@NoArgsConstructor
 public class ProdutoModelRequest {
-
-	private UUID idProduto;
+	private Integer idProduto;
 }
