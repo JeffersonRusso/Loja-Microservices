@@ -10,5 +10,5 @@ public interface ProdutoGateway {
 	
 	Optional<ProdutoDomainResponse> buscarProdutoPorId(ProdutoDomainRequest produtoDomainRequest);
 	
-	List<ProdutoDomainResponse> buscarTodosOsProdutos();
+	Optional<List<ProdutoDomainResponse>> buscarTodosOsProdutos();
 }

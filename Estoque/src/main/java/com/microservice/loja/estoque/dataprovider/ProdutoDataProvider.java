@@ -2,6 +2,7 @@ package com.microservice.loja.estoque.dataprovider;
 
 import static com.microservice.loja.estoque.dataprovider.mapper.ProdutoDataProviderDomainMapper.toProdutoDomain;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,18 +26,19 @@ public class ProdutoDataProvider implements ProdutoGateway {
 	@Override
 	public Optional<ProdutoDomainResponse> buscarProdutoPorId(ProdutoDomainRequest produtoDomainRequest) {
 		
-		ProdutoDomainResponse produtoDomainResponse = new ProdutoDomainResponse();
-		
 		Optional<ProdutoEntity> produtoEntity = produtoRepository.findById(produtoDomainRequest.getIdProduto());
-		
 		
 		return produtoEntity.isPresent() ? Optional.empty() : Optional.of(toProdutoDomain(produtoEntity.get()));
 	}
 
 	@Override
-	public List<ProdutoDomainResponse> buscarTodosOsProdutos() {
+	public Optional<List<ProdutoDomainResponse>> buscarTodosOsProdutos() {
 		
+		final List<ProdutoDomainResponse> listaProdutoDomainResponse = new ArrayList<>();
 		
-		return null;
+		produtoRepository.findAll().stream()
+			.map(produtoEntity -> listaProdutoDomainResponse.add(toProdutoDomain(produtoEntity)));
+		
+		return Optional.ofNullable(listaProdutoDomainResponse);
 	}
 }

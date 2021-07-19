@@ -1,5 +1,6 @@
 package com.microservice.loja.estoque.usecase;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,5 +22,9 @@ public class ProdutoUseCase {
 	public Optional<ProdutoDomainResponse> buscarProdutoPorId(
 			final ProdutoDomainRequest produtoDomainRequest) {
 		return this.produtoGateway.buscarProdutoPorId(produtoDomainRequest);
+	}
+	
+	public Optional<List<ProdutoDomainResponse>> buscarTodosOsProdutos() {
+		return this.produtoGateway.buscarTodosOsProdutos();
 	}
 }
