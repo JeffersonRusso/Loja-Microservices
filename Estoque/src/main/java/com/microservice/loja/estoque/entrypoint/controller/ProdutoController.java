@@ -24,6 +24,7 @@ import com.microservice.loja.estoque.usecase.ProdutoUseCase;
 
 @RestController
 @RequestMapping("/produtos")
+
 public class ProdutoController {
 	
 	private ProdutoUseCase produtoUseCase;
