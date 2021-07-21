@@ -7,6 +7,12 @@ import com.microservice.loja.estoque.entrypoint.model.response.ProdutoModelRespo
 import com.microservice.loja.estoque.usecase.model.response.ProdutoDomainResponse;
 
 public class ProdutoEntryPointModelMapper {
+	
+	/**
+	 * 
+	 *
+	 *
+	 */
 
 	private ProdutoEntryPointModelMapper() {}
 		
@@ -18,17 +24,19 @@ public class ProdutoEntryPointModelMapper {
 				.build();
 	}
 	
-	public static List<ProdutoModelResponse> fromListOfModel(List<ProdutoDomainResponse> produtosDomainResponse) {
+	public static List<ProdutoModelResponse> fromListModel(List<ProdutoDomainResponse> produtoDomainResponse) {
 		
-		List<ProdutoModelResponse> ListaProdutosModelResponse = new ArrayList<>();
+		List<ProdutoModelResponse> listaProdutoModelResponses = new ArrayList<>();
 		
-		produtosDomainResponse.forEach(produto -> {
-			ListaProdutosModelResponse.add(ProdutoModelResponse.builder()
-				.nome(produto.getNome())
-				.preco(produto.getPreco())
-				.imagem(produto.getImagem())
-				.build());
-		});
-		return ListaProdutosModelResponse;
+		for (ProdutoDomainResponse produto : produtoDomainResponse) {
+			listaProdutoModelResponses.add(
+					ProdutoModelResponse.builder()
+							.nome(produto.getNome())
+							.preco(produto.getPreco())
+							.imagem(produto.getImagem())
+							.build()
+			);
+		}
+		return listaProdutoModelResponses;
 	}
 }
