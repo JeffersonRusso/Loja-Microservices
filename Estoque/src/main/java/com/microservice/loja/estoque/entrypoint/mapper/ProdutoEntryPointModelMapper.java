@@ -6,12 +6,17 @@ import java.util.List;
 import com.microservice.loja.estoque.entrypoint.model.response.ProdutoModelResponse;
 import com.microservice.loja.estoque.usecase.model.response.ProdutoDomainResponse;
 
+/**
+ * Mapper que converte um EntryPointModel para um objeto UseCase
+ * 
+ * @author Jefferson Russo
+ * @since 24/06/2021
+ */
+
 public class ProdutoEntryPointModelMapper {
 	
 	/**
-	 * 
-	 *
-	 *
+	 * Construtor privado para evitar instanciação.
 	 */
 
 	private ProdutoEntryPointModelMapper() {}
@@ -25,18 +30,16 @@ public class ProdutoEntryPointModelMapper {
 	}
 	
 	public static List<ProdutoModelResponse> fromListModel(List<ProdutoDomainResponse> produtoDomainResponse) {
-		
-		List<ProdutoModelResponse> listaProdutoModelResponses = new ArrayList<>();
+		List<ProdutoModelResponse> listaProdutosModelResponses = new ArrayList<>();
 		
 		for (ProdutoDomainResponse produto : produtoDomainResponse) {
-			listaProdutoModelResponses.add(
+			listaProdutosModelResponses.add(
 					ProdutoModelResponse.builder()
 							.nome(produto.getNome())
 							.preco(produto.getPreco())
 							.imagem(produto.getImagem())
-							.build()
-			);
+							.build());
 		}
-		return listaProdutoModelResponses;
+		return listaProdutosModelResponses;
 	}
 }
