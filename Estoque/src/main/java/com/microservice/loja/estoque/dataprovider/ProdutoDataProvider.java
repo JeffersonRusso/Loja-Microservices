@@ -20,6 +20,15 @@ import com.microservice.loja.estoque.usecase.model.response.ProdutoDomainRespons
 
 @Component
 public class ProdutoDataProvider implements ProdutoGateway {
+	
+	/**
+	 * @author Jefferson Russo
+	 * @since 30/07/2021
+	 * 
+	 * Classe que trabalha junto ao repositorio, uma abstração para o repositorio
+	 * todo acesso a dados partem dessa classe
+	 * classe que consulta o repositorio de PRODUTOS
+	 */
 
 	private ProdutoRepository produtoRepository;
 	
@@ -44,8 +53,17 @@ public class ProdutoDataProvider implements ProdutoGateway {
 		if(!pagedResult.hasContent()) 
             return Optional.empty();
 		
-		List<ProdutoDomainResponse> produtosEntity = pagedResult.stream().map(produtoEntity -> toProdutoDomain(produtoEntity)).collect(Collectors.toList());
+		List<ProdutoDomainResponse> produtosDomainResponse = pagedResult.stream().map(produtoEntity -> toProdutoDomain(produtoEntity)).collect(Collectors.toList());
 		
-		return Optional.of(produtosEntity).isPresent() ? Optional.of(produtosEntity)  : Optional.empty(); 
-	}	
+		return Optional.of(produtosDomainResponse).isPresent() ? Optional.of(produtosDomainResponse)  : Optional.empty(); 
+	}
+	
+	public Optional<List<ProdutoDomainResponse>> buscarVariosProdutosPorIds(List<ProdutoDomainRequest> produtosDomainRequest) {
+		
+		List<Integer> idsProdutos = produtosDomainRequest.stream().map(produto -> produto.getIdProduto()).collect(Collectors.toList());
+		
+		List<ProdutoDomainResponse> produtoDomainRequest = produtoRepository.findByIds(idsProdutos).stream().map(produtoEntity -> toProdutoDomain(produtoEntity)).collect(Collectors.toList());
+		
+		return Optional.of(produtoDomainRequest).isPresent() ? Optional.of(produtoDomainRequest)  : Optional.empty(); 
+	}
 }

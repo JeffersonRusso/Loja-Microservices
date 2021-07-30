@@ -5,17 +5,21 @@ import static com.microservice.loja.estoque.entrypoint.mapper.ProdutoEntryPointM
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
 
+import com.microservice.loja.estoque.dataprovider.repository.ProdutoRepository;
+import com.microservice.loja.estoque.dataprovider.repository.entity.ProdutoEntity;
 import com.microservice.loja.estoque.entrypoint.mapper.ProdutoEntryPointDomainMapper;
 import com.microservice.loja.estoque.entrypoint.mapper.ProdutoEntryPointModelMapper;
 import com.microservice.loja.estoque.entrypoint.model.request.ProdutoModelRequest;
@@ -24,14 +28,17 @@ import com.microservice.loja.estoque.usecase.ProdutoUseCase;
 
 @RestController
 @RequestMapping("/produtos")
-
 public class ProdutoController {
 	
-	private ProdutoUseCase produtoUseCase;
+	private final ProdutoUseCase produtoUseCase;
+	
+
+	public final ProdutoRepository pr;
 	
 	@Autowired
-	public ProdutoController(ProdutoUseCase produtoUseCase) {
+	public ProdutoController(ProdutoUseCase produtoUseCase, ProdutoRepository pr) {
 		this.produtoUseCase = produtoUseCase;
+		this.pr = pr;
 	}
 	
 	@GetMapping ("/{id}")
@@ -41,18 +48,10 @@ public class ProdutoController {
 		produtoRequest.setIdProduto(id);
 		
 		return produtoUseCase.buscarProdutoPorId(ProdutoEntryPointDomainMapper.fromDomain(produtoRequest))
-				.map(produtoDomainResponse -> fromModel(produtoDomainResponse))
+				.map(ProdutoEntryPointModelMapper::fromModel)
 				.map(response -> new ResponseEntity<>(response, HttpStatus.OK))
 				.orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));
 	}
-
-	/**
-	 * 
-	 * @param pageNo
-	 * @param pageSize
-	 * @param sortBy
-	 * @return 
-	 */
 	
 	@GetMapping ("/all")
 	public  ResponseEntity<List<ProdutoModelResponse>> buscarProdutosVitrine(  
@@ -68,5 +67,21 @@ public class ProdutoController {
         return Optional.of(listaProdutosModelResponse)
         		.map(response -> new ResponseEntity<>(response, HttpStatus.OK)).
         		orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));
+	}
+	
+	@GetMapping (value = "/buscar_ids", params = "ids")
+	public  ResponseEntity<List<ProdutoModelResponse>> buscarProdutosVitrine(@RequestParam List<Integer> ids) {
+
+		List<ProdutoModelRequest> produtosModelRequest = new ArrayList<>();
+		for (Integer id : ids) {
+			produtosModelRequest.add(new ProdutoModelRequest(id));
+		}
+		
+		Optional<List<ProdutoModelResponse>> listaProdutosModelResponse = produtoUseCase.buscarVariosProdutosPorIds(ProdutoEntryPointDomainMapper.fromListDomain(produtosModelRequest))
+				.map(ProdutoEntryPointModelMapper::fromListModel);
+		 
+		return  listaProdutosModelResponse
+	        	.map(response -> new ResponseEntity<>(response, HttpStatus.OK)).
+	        	orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));
 	}
 }

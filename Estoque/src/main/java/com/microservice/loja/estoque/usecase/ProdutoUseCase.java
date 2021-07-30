@@ -19,7 +19,7 @@ public class ProdutoUseCase {
 	private ProdutoGateway produtoGateway;
 	
 	@Autowired
-	public ProdutoUseCase(ProdutoGateway produtoGateway) {
+	public ProdutoUseCase(final ProdutoGateway produtoGateway) {
 		this.produtoGateway = produtoGateway;
 	}
 	
@@ -36,5 +36,9 @@ public class ProdutoUseCase {
 		Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
 		
 		return this.produtoGateway.buscaProdutosVitrine(paging);
-	}	
+	}
+	
+	public Optional<List<ProdutoDomainResponse>> buscarVariosProdutosPorIds(List<ProdutoDomainRequest> produtosDomainRequest) {
+		return this.produtoGateway.buscarVariosProdutosPorIds(produtosDomainRequest);
+	}
 }
