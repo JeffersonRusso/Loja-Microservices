@@ -20,6 +20,7 @@ import org.springframework.web.client.HttpClientErrorException;
 
 import com.microservice.loja.estoque.dataprovider.repository.ProdutoRepository;
 import com.microservice.loja.estoque.dataprovider.repository.entity.ProdutoEntity;
+import com.microservice.loja.estoque.entrypoint.Constants;
 import com.microservice.loja.estoque.entrypoint.mapper.ProdutoEntryPointDomainMapper;
 import com.microservice.loja.estoque.entrypoint.mapper.ProdutoEntryPointModelMapper;
 import com.microservice.loja.estoque.entrypoint.model.request.ProdutoModelRequest;
@@ -27,7 +28,7 @@ import com.microservice.loja.estoque.entrypoint.model.response.ProdutoModelRespo
 import com.microservice.loja.estoque.usecase.ProdutoUseCase;
 
 @RestController
-@RequestMapping("/produtos")
+@RequestMapping(value = Constants.URL)
 public class ProdutoController {
 	
 	private final ProdutoUseCase produtoUseCase;
@@ -41,7 +42,7 @@ public class ProdutoController {
 		this.pr = pr;
 	}
 	
-	@GetMapping ("/{id}")
+	@GetMapping (value = Constants.URL_PRODUTOS_POR_ID)
 	public ResponseEntity<ProdutoModelResponse> buscarProdutoPorId(@PathVariable Integer id) {
 		
 		ProdutoModelRequest produtoRequest = new ProdutoModelRequest();
@@ -53,7 +54,7 @@ public class ProdutoController {
 				.orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));
 	}
 	
-	@GetMapping ("/all")
+	@GetMapping (value = Constants.URL_PRODUTOS_VITRINE)
 	public  ResponseEntity<List<ProdutoModelResponse>> buscarProdutosVitrine(  
 			@RequestParam(defaultValue = "0") Integer pageNo, 
             @RequestParam(defaultValue = "10") Integer pageSize,
@@ -69,7 +70,7 @@ public class ProdutoController {
         		orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));
 	}
 	
-	@GetMapping (value = "/buscar_ids", params = "ids")
+	@GetMapping (value = Constants.URL_PRODUTOS_POR_IDS, params = "ids")
 	public  ResponseEntity<List<ProdutoModelResponse>> buscarProdutosVitrine(@RequestParam List<Integer> ids) {
 
 		List<ProdutoModelRequest> produtosModelRequest = new ArrayList<>();
