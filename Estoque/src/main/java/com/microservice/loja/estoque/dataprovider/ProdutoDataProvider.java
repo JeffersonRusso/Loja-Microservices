@@ -25,7 +25,7 @@ public class ProdutoDataProvider implements ProdutoGateway {
 	 * @author Jefferson Russo
 	 * @since 30/07/2021
 	 * 
-	 * Classe que trabalha junto ao repositorio, uma abstração para o repositorio
+	 * Classe que trabalha junto ao repositorio, é uma abstração para o repositorio
 	 * todo acesso a dados partem dessa classe
 	 * classe que consulta o repositorio de PRODUTOS
 	 */
