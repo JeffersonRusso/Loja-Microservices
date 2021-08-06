@@ -33,13 +33,9 @@ public class ProdutoController {
 	
 	private final ProdutoUseCase produtoUseCase;
 	
-
-	public final ProdutoRepository pr;
-	
 	@Autowired
 	public ProdutoController(ProdutoUseCase produtoUseCase, ProdutoRepository pr) {
 		this.produtoUseCase = produtoUseCase;
-		this.pr = pr;
 	}
 	
 	@GetMapping (value = Constants.URL_PRODUTOS_POR_ID)
@@ -82,7 +78,7 @@ public class ProdutoController {
 				.map(ProdutoEntryPointModelMapper::fromListModel);
 		 
 		return  listaProdutosModelResponse
-	        	.map(response -> new ResponseEntity<>(response, HttpStatus.OK)).
-	        	orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));
+	        	.map(response -> new ResponseEntity<>(response, HttpStatus.OK))
+	        	.orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));
 	}
 }

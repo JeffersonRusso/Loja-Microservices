@@ -11,7 +11,7 @@ import com.microservice.loja.carrinho.dataprovider.repository.entity.CarrinhoEnt
 @Repository
 public interface CarrinhoRepository extends JpaRepository<CarrinhoEntity, Integer> {
 	
-	Optional<CarrinhoEntity> findById(Integer id);
+	Optional<CarrinhoEntity> fin(Integer id);
 	
 	List<CarrinhoEntity> findAll();
 

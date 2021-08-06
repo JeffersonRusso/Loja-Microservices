@@ -9,11 +9,13 @@ import org.springframework.util.ReflectionUtils;
 import com.microservice.loja.carrinho.dataprovider.repository.CarrinhoRepository;
 import com.microservice.loja.carrinho.dataprovider.repository.entity.CarrinhoEntity;
 import com.microservice.loja.carrinho.dataprovider.repository.model.ProdutoModel;
+import com.microservice.loja.carrinho.usecase.gateway.CarrinhoGateway;
 import com.microservice.loja.carrinho.usecase.model.request.CarrinhoDomainRequest;
 import com.microservice.loja.carrinho.usecase.model.response.CarrinhoDomainResponse;
 import static com.microservice.loja.carrinho.dataprovider.mapper.CarrinhoDataProviderDomainMapper.toCarrinhoDomain;
+import static com.microservice.loja.carrinho.dataprovider.mapper.CarrinhoDataProviderEntityMapper.forEntity;
 
-public class CarrinhoDataProvider {
+public class CarrinhoDataProvider implements CarrinhoGateway  {
 	
 	/**
 	 * @author Jefferson Russo
@@ -40,7 +42,10 @@ public class CarrinhoDataProvider {
  	}
 	
 	public Optional<CarrinhoDomainResponse> AtualizarProdutoCarrinho(CarrinhoDomainRequest carrinhoDomainRequest) {
+			
+		CarrinhoEntity carrinhoEntity = carrinhoRepository.save(forEntity(carrinhoDomainRequest));
 		
-		Optional<CarrinhoEntity> carrinhoEntity = carrinhoRepository.save(carrinhoDomainRequest, carrinhoDomainRequest.getIdCarrinho());
+		return Optional.of(carrinhoEntity).isPresent() ? Optional.of(toCarrinhoDomain(carrinhoEntity))
+				: Optional.empty();
 	}
 }

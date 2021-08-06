@@ -14,5 +14,5 @@ import lombok.Setter;
 @Builder
 public class CarrinhoDomainResponse {
     
-    private List<ProdutoModel> produtos;
+    private ProdutoModel produtos;
 }
