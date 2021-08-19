@@ -18,5 +18,5 @@ public interface ProdutoGateway {
 	
 	Optional<List<ProdutoDomainResponse>> buscaProdutosVitrine(Pageable paging);
 	
-	Optional<List<ProdutoDomainResponse>> buscarVariosProdutosPorIds(List<ProdutoDomainRequest> produtosDomainRequest);
+	Optional<List<ProdutoDomainResponse>> buscarProdutosPorIds(List<ProdutoDomainRequest> produtosDomainRequest);
 }

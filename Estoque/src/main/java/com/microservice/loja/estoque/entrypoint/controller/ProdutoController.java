@@ -67,7 +67,7 @@ public class ProdutoController {
 	}
 	
 	@GetMapping (value = Constants.URL_PRODUTOS_POR_IDS, params = "ids")
-	public  ResponseEntity<List<ProdutoModelResponse>> buscarProdutosVitrine(@RequestParam List<Integer> ids) {
+	public  ResponseEntity<List<ProdutoModelResponse>> buscaProdutoPorIds(@RequestParam List<Integer> ids) {
 
 		List<ProdutoModelRequest> produtosModelRequest = new ArrayList<>();
 		for (Integer id : ids) {

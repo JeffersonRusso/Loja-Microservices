@@ -1,5 +1,8 @@
 package com.microservice.loja.carrinho.entrypoint.mapper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.microservice.loja.carrinho.dataprovider.repository.model.ProdutoModel;
 import com.microservice.loja.carrinho.entrypoint.model.request.CarrinhoModelRequest;
 import com.microservice.loja.carrinho.entrypoint.model.response.CarrinhoModelResponse;
@@ -12,16 +15,23 @@ public class CarrinhoEntryPointDomainMapper {
 	private CarrinhoEntryPointDomainMapper() {}
 	
 	public static CarrinhoModelResponse forModel (CarrinhoDomainResponse response) {
+		
+		List<CarrinhoModelResponse.Produto> listaProdutosDomain = new ArrayList<>();
+		
+		response.getProdutos().forEach(produto ->
+			listaProdutosDomain.add(new CarrinhoModelResponse.Produto(produto.getIdProduto(), produto.getQuantidade()))
+		);
+		
 		return CarrinhoModelResponse.builder()
-				.idProduto(response.getProdutos().getIdProduto())
-				.quantidade(response.getProdutos().getQuantidade())
+				.produtos(listaProdutosDomain)
 				.build();
 	}
 	
-	public static CarrinhoDomainRequest forDomain (CarrinhoModelRequest request) {
+	public static CarrinhoDomainRequest forDomain (CarrinhoModelRequest request) {	
+		
 		return CarrinhoDomainRequest.builder()
 				.idCarrinho(request.getIdCarrinho())
-				.produtos(new ProdutoModel(request.getIdProduto(), request.getQuantidade()))
+				.produto(new CarrinhoDomainRequest.Produto(request.getIdProduto(), request.getQuantidade()))
 				.build();
 	}
 }

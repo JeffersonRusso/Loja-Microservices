@@ -1,22 +1,29 @@
 package com.microservice.loja.carrinho.dataprovider.repository.entity;
 
-import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Embeddable;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.microservice.loja.carrinho.dataprovider.repository.model.ProdutoModel;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,11 +32,9 @@ import lombok.NoArgsConstructor;
 public class CarrinhoEntity {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
 	private Integer idCarrinho;
     
     private Integer idUsuario;
     
-    private List<ProdutoModel> produtos;
-
+    private String produtos;
 }

@@ -58,7 +58,7 @@ public class ProdutoDataProvider implements ProdutoGateway {
 		return Optional.of(produtosDomainResponse).isPresent() ? Optional.of(produtosDomainResponse)  : Optional.empty(); 
 	}
 	
-	public Optional<List<ProdutoDomainResponse>> buscarVariosProdutosPorIds(List<ProdutoDomainRequest> produtosDomainRequest) {
+	public Optional<List<ProdutoDomainResponse>> buscarProdutosPorIds(List<ProdutoDomainRequest> produtosDomainRequest) {
 		
 		List<Integer> idsProdutos = produtosDomainRequest.stream().map(produto -> produto.getIdProduto()).collect(Collectors.toList());
 		

@@ -39,6 +39,6 @@ public class ProdutoUseCase {
 	}
 	
 	public Optional<List<ProdutoDomainResponse>> buscarVariosProdutosPorIds(List<ProdutoDomainRequest> produtosDomainRequest) {
-		return this.produtoGateway.buscarVariosProdutosPorIds(produtosDomainRequest);
+		return this.produtoGateway.buscarProdutosPorIds(produtosDomainRequest);
 	}
 }

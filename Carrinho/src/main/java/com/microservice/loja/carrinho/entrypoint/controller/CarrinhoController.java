@@ -5,6 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,12 +38,10 @@ public class CarrinhoController {
 		this.carrinhoUserCase = carrinhoUserCase;
 	}
 
-	public void atualizarProduto() {}
-	
-	@PatchMapping(value = "carrinho/{idproduto}/{quantidade}")
+	@PatchMapping(value = "/{idCarrinho}/{idProduto}/{quantidade}")
 	public ResponseEntity<CarrinhoModelResponse> atualizarProduto(
-			  @RequestBody Integer idCarrinho
-			, @PathVariable Integer idProduto
+			  @PathVariable Integer idCarrinho
+			, @PathVariable String idProduto
 			, @PathVariable Integer quantidade ) {
 		
 		List<ProdutoModel> produtos = new ArrayList<ProdutoModel>();
@@ -52,6 +52,16 @@ public class CarrinhoController {
 				.map(CarrinhoEntryPointDomainMapper::forModel)
 				.map(modelResponse -> new ResponseEntity<>(modelResponse, HttpStatus.OK))
 				.orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));
+	}
+	
+	@PutMapping(value = "/adiciona")
+	public ResponseEntity<CarrinhoModelResponse> adicionarProduto(
+			  @RequestBody CarrinhoModelRequest carrinhoModelRequest) {
 		
+		return carrinhoUserCase.adicionarProduto(
+				forDomain(carrinhoModelRequest))
+				.map(CarrinhoEntryPointDomainMapper::forModel)
+				.map(modelResponse -> new ResponseEntity<>(modelResponse, HttpStatus.OK))
+				.orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));
 	}
 }

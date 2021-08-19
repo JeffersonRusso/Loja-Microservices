@@ -11,6 +11,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CarrinhoModelRequest {
 	private Integer idCarrinho;
-	private Integer idProduto;
+	private String idProduto;
 	private Integer quantidade;
 }

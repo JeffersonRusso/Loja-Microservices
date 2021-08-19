@@ -1,8 +1,11 @@
 package com.microservice.loja.carrinho.dataprovider.mapper;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
 import com.microservice.loja.carrinho.dataprovider.repository.entity.CarrinhoEntity;
 import com.microservice.loja.carrinho.usecase.model.request.CarrinhoDomainRequest;
-import com.microservice.loja.carrinho.usecase.model.response.CarrinhoDomainResponse;
 
 public class CarrinhoDataProviderEntityMapper {
 	
@@ -10,9 +13,7 @@ public class CarrinhoDataProviderEntityMapper {
 	private CarrinhoDataProviderEntityMapper() {}
 	
 	public static CarrinhoEntity forEntity(CarrinhoDomainRequest carrinhoDomainRequest) {
-		return CarrinhoEntity.builder()
-					.idCarrinho(carrinhoDomainRequest.getIdCarrinho())
-					.produtos(carrinhoDomainRequest.getProdutos())
-					.build();
+		
+		return null;
 	}
 }
