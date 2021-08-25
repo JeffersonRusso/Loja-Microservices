@@ -47,11 +47,10 @@ public class CarrinhoController {
 		List<ProdutoModel> produtos = new ArrayList<ProdutoModel>();
 		produtos.add(new ProdutoModel(idProduto, quantidade));
 		
-		return carrinhoUserCase.AtualizarProdutoCarrinho(
+		return carrinhoUserCase.atualizaProdutoCarrinho(
 				forDomain(new CarrinhoModelRequest(idCarrinho, idProduto, quantidade)))
 				.map(CarrinhoEntryPointDomainMapper::forModel)
 				.map(modelResponse -> new ResponseEntity<>(modelResponse, HttpStatus.OK))
-				.orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));
-		
+				.orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));	
 	}
 }

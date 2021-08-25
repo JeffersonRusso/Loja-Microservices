@@ -13,7 +13,7 @@ public class CarrinhoUseCase {
 	@Autowired
 	private CarrinhoGateway carrinhoGateway;
 	
-	public Optional<CarrinhoDomainResponse> AtualizarProdutoCarrinho(CarrinhoDomainRequest carrinhoDomainRequest) {
+	public Optional<CarrinhoDomainResponse> atualizaProdutoCarrinho(CarrinhoDomainRequest carrinhoDomainRequest) {
 		return carrinhoGateway.AtualizarProdutoCarrinho(carrinhoDomainRequest);
 	} 
 	

@@ -48,4 +48,12 @@ public class CarrinhoDataProvider implements CarrinhoGateway  {
 		return Optional.of(carrinhoEntity).isPresent() ? Optional.of(toCarrinhoDomain(carrinhoEntity))
 				: Optional.empty();
 	}
+	
+	public Optional<CarrinhoDomainResponse> AtualizarProdutoCarrinho(CarrinhoDomainRequest carrinhoDomainRequest) {
+		
+		CarrinhoEntity carrinhoEntity = carrinhoRepository.save(forEntity(carrinhoDomainRequest));
+		
+		return Optional.of(carrinhoEntity).isPresent() ? Optional.of(toCarrinhoDomain(carrinhoEntity))
+				: Optional.empty();
+	}
 }
