@@ -2,8 +2,10 @@ package com.microservice.loja.carrinho.dataprovider;
 
 import java.lang.reflect.Field;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.util.ReflectionUtils;
 
 import com.microservice.loja.carrinho.dataprovider.repository.CarrinhoRepository;
@@ -41,19 +43,30 @@ public class CarrinhoDataProvider implements CarrinhoGateway  {
 		return carrinhoEntity.isPresent() ? Optional.of(toCarrinhoDomain(carrinhoEntity.get())) : Optional.empty();
  	}
 	
-	public Optional<CarrinhoDomainResponse> AtualizarProdutoCarrinho(CarrinhoDomainRequest carrinhoDomainRequest) {
-			
+	public Optional<CarrinhoDomainResponse> atualizarProdutoCarrinho(CarrinhoDomainRequest carrinhoDomainRequest) {		
+		
 		CarrinhoEntity carrinhoEntity = carrinhoRepository.save(forEntity(carrinhoDomainRequest));
 		
 		return Optional.of(carrinhoEntity).isPresent() ? Optional.of(toCarrinhoDomain(carrinhoEntity))
 				: Optional.empty();
 	}
-	
-	public Optional<CarrinhoDomainResponse> AtualizarProdutoCarrinho(CarrinhoDomainRequest carrinhoDomainRequest) {
+
+	public Optional<CarrinhoDomainResponse> adicionaProduto(CarrinhoDomainRequest carrinhoDomainRequest) {
 		
 		CarrinhoEntity carrinhoEntity = carrinhoRepository.save(forEntity(carrinhoDomainRequest));
 		
 		return Optional.of(carrinhoEntity).isPresent() ? Optional.of(toCarrinhoDomain(carrinhoEntity))
 				: Optional.empty();
+	}
+
+	public Optional<CarrinhoDomainResponse> criaCarrinho(String idUsuario) {
+		
+		Optional<CarrinhoEntity> carrinhoEntity = carrinhoRepository.findById(idUsuario); 
+		
+		return !carrinhoEntity.isPresent() ? 
+			Optional.of(
+				toCarrinhoDomain(
+					carrinhoRepository.save(new CarrinhoEntity(UUID.randomUUID().toString(), idUsuario, null)))) 
+			: Optional.empty()	;
 	}
 }

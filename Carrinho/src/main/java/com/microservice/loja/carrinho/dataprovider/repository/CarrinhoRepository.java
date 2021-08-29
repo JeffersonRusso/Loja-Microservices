@@ -9,9 +9,9 @@ import org.springframework.stereotype.Repository;
 import com.microservice.loja.carrinho.dataprovider.repository.entity.CarrinhoEntity;
 
 @Repository
-public interface CarrinhoRepository extends JpaRepository<CarrinhoEntity, Integer> {
+public interface CarrinhoRepository extends JpaRepository<CarrinhoEntity, String> {
 	
-	Optional<CarrinhoEntity> fin(Integer id);
+	Optional<CarrinhoEntity> findById(String idUsuario);
 	
 	List<CarrinhoEntity> findAll();
 

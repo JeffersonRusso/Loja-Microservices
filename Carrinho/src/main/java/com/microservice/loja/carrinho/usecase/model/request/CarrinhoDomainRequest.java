@@ -1,14 +1,9 @@
 package com.microservice.loja.carrinho.usecase.model.request;
 
-import java.util.List;
-
-import javax.persistence.Entity;
-
-import com.microservice.loja.carrinho.dataprovider.repository.model.ProdutoModel;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Setter
@@ -17,6 +12,15 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CarrinhoDomainRequest {
 
-	private Integer idCarrinho;
-	private ProdutoModel produtos;
+	private String idCarrinho;
+	private Produto produto;
+	
+	@Builder
+	@Getter
+	@AllArgsConstructor
+	@NoArgsConstructor
+	static public class Produto {
+		private String idProduto;
+		private Integer quantidade;
+	}
 }

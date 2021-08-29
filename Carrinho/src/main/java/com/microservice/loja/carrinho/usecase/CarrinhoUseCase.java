@@ -13,11 +13,20 @@ public class CarrinhoUseCase {
 	@Autowired
 	private CarrinhoGateway carrinhoGateway;
 	
+	public Optional<CarrinhoDomainResponse> adicionaProduto(CarrinhoDomainRequest carrinhoDomainRequest) {
+		return carrinhoGateway.adicionaProduto(carrinhoDomainRequest);
+	}
+	
 	public Optional<CarrinhoDomainResponse> atualizaProdutoCarrinho(CarrinhoDomainRequest carrinhoDomainRequest) {
-		return carrinhoGateway.AtualizarProdutoCarrinho(carrinhoDomainRequest);
+		return carrinhoGateway.atualizarProdutoCarrinho(carrinhoDomainRequest);
 	} 
 	
 	public Optional<CarrinhoDomainResponse> buscarCarrinhoPorId(CarrinhoDomainRequest carrinhoDomainRequest) {
 		return carrinhoGateway.buscarCarrinhoPorId(carrinhoDomainRequest);
 	}
+	
+	public Optional<CarrinhoDomainResponse> criaCarrinho(String idUsuario) {
+		return carrinhoGateway.criaCarrinho(idUsuario);
+	}
+	
 }

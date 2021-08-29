@@ -12,7 +12,10 @@ public class CarrinhoDataProviderEntityMapper {
 	public static CarrinhoEntity forEntity(CarrinhoDomainRequest carrinhoDomainRequest) {
 		return CarrinhoEntity.builder()
 					.idCarrinho(carrinhoDomainRequest.getIdCarrinho())
-					.produtos(carrinhoDomainRequest.getProdutos())
+					.produto(CarrinhoEntity.Produto.builder()
+							.idProduto(carrinhoDomainRequest.getProduto().getIdProduto())
+							.quantidade(carrinhoDomainRequest.getProduto().getQuantidade())
+							.build())
 					.build();
 	}
 }

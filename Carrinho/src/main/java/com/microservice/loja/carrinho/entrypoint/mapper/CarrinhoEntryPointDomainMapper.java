@@ -1,6 +1,5 @@
 package com.microservice.loja.carrinho.entrypoint.mapper;
 
-import com.microservice.loja.carrinho.dataprovider.repository.model.ProdutoModel;
 import com.microservice.loja.carrinho.entrypoint.model.request.CarrinhoModelRequest;
 import com.microservice.loja.carrinho.entrypoint.model.response.CarrinhoModelResponse;
 import com.microservice.loja.carrinho.usecase.model.request.CarrinhoDomainRequest;
@@ -12,16 +11,24 @@ public class CarrinhoEntryPointDomainMapper {
 	private CarrinhoEntryPointDomainMapper() {}
 	
 	public static CarrinhoModelResponse forModel (CarrinhoDomainResponse response) {
+		
 		return CarrinhoModelResponse.builder()
-				.idProduto(response.getProdutos().getIdProduto())
-				.quantidade(response.getProdutos().getQuantidade())
+				.idCarrinho(response.getIdCarrinho())
+				.produto(CarrinhoModelResponse.Produto.builder()
+						.idProduto(response.getProduto().getIdProduto())
+						.quantidade(response.getProduto().getQuantidade())
+						.build())
 				.build();
 	}
 	
-	public static CarrinhoDomainRequest forDomain (CarrinhoModelRequest request) {
+	public static CarrinhoDomainRequest forDomain(CarrinhoModelRequest request) {
+		
 		return CarrinhoDomainRequest.builder()
 				.idCarrinho(request.getIdCarrinho())
-				.produtos(new ProdutoModel(request.getIdProduto(), request.getQuantidade()))
-				.build();
+				.produto(CarrinhoDomainRequest.Produto.builder()
+						.idProduto(request.getProdutos().getIdProduto())
+						.quantidade(request.getProdutos().getQuantidade())
+						.build())
+				.build();	
 	}
 }

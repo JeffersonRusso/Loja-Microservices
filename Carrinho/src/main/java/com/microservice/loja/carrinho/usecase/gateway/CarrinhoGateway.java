@@ -7,8 +7,11 @@ import com.microservice.loja.carrinho.usecase.model.response.CarrinhoDomainRespo
 
 public interface CarrinhoGateway {
 	
-	Optional<CarrinhoDomainResponse> AtualizarProdutoCarrinho(CarrinhoDomainRequest carrinhoDomainRequest); 
+	Optional<CarrinhoDomainResponse> atualizarProdutoCarrinho(CarrinhoDomainRequest carrinhoDomainRequest); 
 		
 	Optional<CarrinhoDomainResponse> buscarCarrinhoPorId(CarrinhoDomainRequest carrinhoDomainRequest);
-		
+	
+	Optional<CarrinhoDomainResponse> adicionaProduto(CarrinhoDomainRequest carrinhoDomainRequest);
+	
+	Optional<CarrinhoDomainResponse> criaCarrinho(String idUsuario);
 }

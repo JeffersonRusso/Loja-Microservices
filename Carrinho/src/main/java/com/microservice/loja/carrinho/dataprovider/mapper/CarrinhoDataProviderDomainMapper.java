@@ -1,5 +1,10 @@
 package com.microservice.loja.carrinho.dataprovider.mapper;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.hibernate.mapping.Array;
+
 import com.microservice.loja.carrinho.dataprovider.repository.entity.CarrinhoEntity;
 import com.microservice.loja.carrinho.usecase.model.response.CarrinhoDomainResponse;
 
@@ -11,8 +16,13 @@ public class CarrinhoDataProviderDomainMapper {
 	}
 	
 	public static CarrinhoDomainResponse toCarrinhoDomain(CarrinhoEntity carrinhoEntity) {
+		
 		return CarrinhoDomainResponse.builder()
-				.produtos(carrinhoEntity.getProdutos())
+				.idCarrinho(carrinhoEntity.getIdCarrinho())
+				.produto(CarrinhoDomainResponse.Produto.builder()
+						.idProduto(carrinhoEntity.getProduto().getIdProduto())
+						.quantidade(carrinhoEntity.getProduto().getQuantidade())
+						.build())
 				.build();
 	}
 }

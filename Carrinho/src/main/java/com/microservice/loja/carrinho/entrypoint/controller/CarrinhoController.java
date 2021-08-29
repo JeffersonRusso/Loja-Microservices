@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,17 +39,42 @@ public class CarrinhoController {
 
 	public void atualizarProduto() {}
 	
+	//cria carrinho para o usuario
+	//deleta item carrinho
+	//-- adiciona item carrinho
+	
+	@PostMapping(value = "carrinho/{idproduto}/{quantidade}")
+	public ResponseEntity<CarrinhoModelResponse> adicionaProduto(
+			  @RequestBody CarrinhoModelRequest carrinhoModelRequest) {
+		
+		return carrinhoUserCase.adicionaProduto(
+				forDomain(carrinhoModelRequest))
+				.map(CarrinhoEntryPointDomainMapper::forModel)
+				.map(modelResponse -> new ResponseEntity<>(modelResponse, HttpStatus.OK))
+				.orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));	
+	}
+	
 	@PatchMapping(value = "carrinho/{idproduto}/{quantidade}")
 	public ResponseEntity<CarrinhoModelResponse> atualizarProduto(
-			  @RequestBody Integer idCarrinho
-			, @PathVariable Integer idProduto
+			  @RequestBody String idCarrinho
+			, @PathVariable String idProduto
 			, @PathVariable Integer quantidade ) {
 		
-		List<ProdutoModel> produtos = new ArrayList<ProdutoModel>();
-		produtos.add(new ProdutoModel(idProduto, quantidade));
+		CarrinhoModelRequest carrinhoModelRequest = new CarrinhoModelRequest(idCarrinho, 
+				new CarrinhoModelRequest.Produto(idProduto, quantidade));
 		
 		return carrinhoUserCase.atualizaProdutoCarrinho(
-				forDomain(new CarrinhoModelRequest(idCarrinho, idProduto, quantidade)))
+				forDomain(carrinhoModelRequest))
+				.map(CarrinhoEntryPointDomainMapper::forModel)
+				.map(modelResponse -> new ResponseEntity<>(modelResponse, HttpStatus.OK))
+				.orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));	
+	}
+	
+	@PostMapping(value = "/idUsuario")
+	public ResponseEntity<CarrinhoModelResponse> criaCarrinho(
+			  @RequestBody String idUsuario ) {
+		
+	return carrinhoUserCase.criaCarrinho(idUsuario)
 				.map(CarrinhoEntryPointDomainMapper::forModel)
 				.map(modelResponse -> new ResponseEntity<>(modelResponse, HttpStatus.OK))
 				.orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));	
