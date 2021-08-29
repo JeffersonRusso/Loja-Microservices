@@ -69,7 +69,7 @@ public class CarrinhoController {
 				.map(modelResponse -> new ResponseEntity<>(modelResponse, HttpStatus.OK))
 				.orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));	
 	}
-	
+	 
 	@PostMapping(value = "/idUsuario")
 	public ResponseEntity<CarrinhoModelResponse> criaCarrinho(
 			  @RequestBody String idUsuario ) {
