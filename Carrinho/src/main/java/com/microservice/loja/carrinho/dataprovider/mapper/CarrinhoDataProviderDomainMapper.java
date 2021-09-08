@@ -1,10 +1,5 @@
 package com.microservice.loja.carrinho.dataprovider.mapper;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.hibernate.mapping.Array;
-
 import com.microservice.loja.carrinho.dataprovider.repository.entity.CarrinhoEntity;
 import com.microservice.loja.carrinho.usecase.model.response.CarrinhoDomainResponse;
 

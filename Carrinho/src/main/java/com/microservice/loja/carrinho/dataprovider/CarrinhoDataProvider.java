@@ -1,21 +1,18 @@
 package com.microservice.loja.carrinho.dataprovider;
 
-import java.lang.reflect.Field;
+import static com.microservice.loja.carrinho.dataprovider.mapper.CarrinhoDataProviderDomainMapper.toCarrinhoDomain;
+import static com.microservice.loja.carrinho.dataprovider.mapper.CarrinhoDataProviderEntityMapper.forEntity;
+
 import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.util.ReflectionUtils;
 
 import com.microservice.loja.carrinho.dataprovider.repository.CarrinhoRepository;
 import com.microservice.loja.carrinho.dataprovider.repository.entity.CarrinhoEntity;
-import com.microservice.loja.carrinho.dataprovider.repository.model.ProdutoModel;
 import com.microservice.loja.carrinho.usecase.gateway.CarrinhoGateway;
 import com.microservice.loja.carrinho.usecase.model.request.CarrinhoDomainRequest;
 import com.microservice.loja.carrinho.usecase.model.response.CarrinhoDomainResponse;
-import static com.microservice.loja.carrinho.dataprovider.mapper.CarrinhoDataProviderDomainMapper.toCarrinhoDomain;
-import static com.microservice.loja.carrinho.dataprovider.mapper.CarrinhoDataProviderEntityMapper.forEntity;
 
 public class CarrinhoDataProvider implements CarrinhoGateway  {
 	
@@ -39,24 +36,21 @@ public class CarrinhoDataProvider implements CarrinhoGateway  {
 	public Optional<CarrinhoDomainResponse> buscarCarrinhoPorId(CarrinhoDomainRequest carrinhoDomainRequest) {
 		
 		Optional<CarrinhoEntity> carrinhoEntity = carrinhoRepository.findById(carrinhoDomainRequest.getIdCarrinho());
-		
 		return carrinhoEntity.isPresent() ? Optional.of(toCarrinhoDomain(carrinhoEntity.get())) : Optional.empty();
  	}
 	
 	public Optional<CarrinhoDomainResponse> atualizarProdutoCarrinho(CarrinhoDomainRequest carrinhoDomainRequest) {		
 		
-		CarrinhoEntity carrinhoEntity = carrinhoRepository.save(forEntity(carrinhoDomainRequest));
-		
-		return Optional.of(carrinhoEntity).isPresent() ? Optional.of(toCarrinhoDomain(carrinhoEntity))
-				: Optional.empty();
+		return Optional.of(
+				toCarrinhoDomain(carrinhoRepository.save(
+						forEntity(carrinhoDomainRequest))));
 	}
 
 	public Optional<CarrinhoDomainResponse> adicionaProduto(CarrinhoDomainRequest carrinhoDomainRequest) {
 		
-		CarrinhoEntity carrinhoEntity = carrinhoRepository.save(forEntity(carrinhoDomainRequest));
-		
-		return Optional.of(carrinhoEntity).isPresent() ? Optional.of(toCarrinhoDomain(carrinhoEntity))
-				: Optional.empty();
+		return Optional.of(
+				toCarrinhoDomain(carrinhoRepository.save(
+						forEntity(carrinhoDomainRequest))));
 	}
 
 	public Optional<CarrinhoDomainResponse> criaCarrinho(String idUsuario) {

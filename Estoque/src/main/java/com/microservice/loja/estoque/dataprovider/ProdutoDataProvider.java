@@ -2,7 +2,6 @@ package com.microservice.loja.estoque.dataprovider;
 
 import static com.microservice.loja.estoque.dataprovider.mapper.ProdutoDataProviderDomainMapper.toProdutoDomain;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -55,15 +54,15 @@ public class ProdutoDataProvider implements ProdutoGateway {
 		
 		List<ProdutoDomainResponse> produtosDomainResponse = pagedResult.stream().map(produtoEntity -> toProdutoDomain(produtoEntity)).collect(Collectors.toList());
 		
-		return Optional.of(produtosDomainResponse).isPresent() ? Optional.of(produtosDomainResponse)  : Optional.empty(); 
+		return !produtosDomainResponse.isEmpty() ? Optional.of(produtosDomainResponse)  : Optional.empty(); 
 	}
 	
 	public Optional<List<ProdutoDomainResponse>> buscarVariosProdutosPorIds(List<ProdutoDomainRequest> produtosDomainRequest) {
 		
 		List<Integer> idsProdutos = produtosDomainRequest.stream().map(produto -> produto.getIdProduto()).collect(Collectors.toList());
 		
-		List<ProdutoDomainResponse> produtoDomainRequest = produtoRepository.findByIds(idsProdutos).stream().map(produtoEntity -> toProdutoDomain(produtoEntity)).collect(Collectors.toList());
+		List<ProdutoDomainResponse> produtosDomainResponse = produtoRepository.findByIds(idsProdutos).stream().map(produtoEntity -> toProdutoDomain(produtoEntity)).collect(Collectors.toList());
 		
-		return Optional.of(produtoDomainRequest).isPresent() ? Optional.of(produtoDomainRequest)  : Optional.empty(); 
+		return !produtosDomainResponse.isEmpty() ? Optional.of(produtosDomainResponse)  : Optional.empty(); 
 	}
 }
