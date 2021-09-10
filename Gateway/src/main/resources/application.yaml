@@ -1,0 +1,25 @@
+server:
+  port: 8282
+
+eureka:
+  instance:
+    prefer-ip-address: true # registers the service ip rather than the server name / registra o ip do serviço em vez do nome do servidor
+  client:
+    register-with-eureka: true # register him self at eureka / registre-se no eureka
+    fetch-registry: true # pull down a local copy of the registries / puxa uma coipia local dos registros
+    service-url:
+      defaultZone: http://localhost:8761/eureka # discovery service location / descobre o local do servico
+spring:
+  application:
+    name: gateway # gateway service name to be called by it clients / nome do serviço / da aplicação spring
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true # use netflix eureka discovery service / usa eureka discovery service
+      routes:
+        - id: user
+          uri: lb://user-microservice # netflix eureka correspondent service / serviço eureka correspondente
+          predicates:
+          - Path=/user/** # how we will map the url to the target service / como mapearemos o URL para o serviço de destino
+
