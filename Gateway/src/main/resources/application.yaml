@@ -22,4 +22,26 @@ spring:
           uri: lb://user-microservice # netflix eureka correspondent service / serviço eureka correspondente
           predicates:
           - Path=/user/** # how we will map the url to the target service / como mapearemos o URL para o serviço de destino
-
+          
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            token-uri: //localhost:8080/auth/realms/Demo-realm/protocol/openid-connect/token
+            authorization-uri: //localhost:8080/auth/realms/Demo-realm/protocol/openid-connect/auth
+            user-name-attribute: preferred_username
+            user-info-uri: //localhost:8080/auth/realms/Demo-realm/protocol/openid-connect/userinfo
+            jwk-set-uri: //localhost:8080/auth/realms/Demo-realm/protocol/openid-connect/certs
+            user-info-authentication-method: header
+        registration:
+          internet-banking-core-client:
+            provider: keycloak
+            client-id: user-microservicea
+            client-secret: e9b7768f-b718-411b-a055-c3fce373a8ad
+            authorization-grant-type: authorization_code
+            redirect-uri: http://localhost:8080/login/oauth2/code/keycloak
+            scope: openid
+      resourceserver:
+        jwt:
+          jwk-set-uri: localhost:8080/auth/realms/education/protocol/openid-connect/certs
