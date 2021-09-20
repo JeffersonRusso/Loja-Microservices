@@ -1,6 +1,12 @@
 server:
   port: 8282
-
+  
+app:
+  config:
+    keycloak:
+      url: http://localhost:8080/auth
+      realm: demo-realm
+      
 eureka:
   instance:
     prefer-ip-address: true # registers the service ip rather than the server name / registra o ip do serviço em vez do nome do servidor
@@ -8,8 +14,9 @@ eureka:
     register-with-eureka: true # register him self at eureka / registre-se no eureka
     fetch-registry: true # pull down a local copy of the registries / puxa uma coipia local dos registros
     service-url:
-      defaultZone: http://localhost:8761/eureka # discovery service location / descobre o local do servico
-spring:
+      defaultZone: http://localhost:8761/eureka/ # discovery service location / descobre o local do servico
+
+spring:       
   application:
     name: gateway # gateway service name to be called by it clients / nome do serviço / da aplicação spring
   cloud:
@@ -21,27 +28,27 @@ spring:
         - id: user
           uri: lb://user-microservice # netflix eureka correspondent service / serviço eureka correspondente
           predicates:
-          - Path=/user/** # how we will map the url to the target service / como mapearemos o URL para o serviço de destino
-          
+          - Path=/user/** # how we will map the url to the target service / como mapearemos o URL para o serviço de destino 
   security:
     oauth2:
       client:
         provider:
           keycloak:
-            token-uri: //localhost:8080/auth/realms/Demo-realm/protocol/openid-connect/token
-            authorization-uri: //localhost:8080/auth/realms/Demo-realm/protocol/openid-connect/auth
+            token-uri:  http://localhost:8080/auth/realms/demo-realm/protocol/openid-connect/token
+            authorization-uri:  http://localhost:8080/auth/realms/demo-realm/protocol/openid-connect/auth
             user-name-attribute: preferred_username
-            user-info-uri: //localhost:8080/auth/realms/Demo-realm/protocol/openid-connect/userinfo
-            jwk-set-uri: //localhost:8080/auth/realms/Demo-realm/protocol/openid-connect/certs
+            user-info-uri:  http://localhost:8080/auth/realms/demo-realm/protocol/openid-connect/userinfo
+            jwk-set-uri:   http://localhost:8080/auth/realms/demo-realm/protocol/openid-connect/certs
             user-info-authentication-method: header
         registration:
-          internet-banking-core-client:
+          user-microservice:
             provider: keycloak
-            client-id: user-microservicea
+            client-id: user-microservice
             client-secret: e9b7768f-b718-411b-a055-c3fce373a8ad
             authorization-grant-type: authorization_code
             redirect-uri: http://localhost:8080/login/oauth2/code/keycloak
             scope: openid
       resourceserver:
         jwt:
-          jwk-set-uri: localhost:8080/auth/realms/education/protocol/openid-connect/certs
+          jwk-set-uri: http://localhost:8080/auth/realms/demo-realm/protocol/openid-connect/certs
+          
