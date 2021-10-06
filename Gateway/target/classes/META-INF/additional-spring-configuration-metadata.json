@@ -1,0 +1,12 @@
+{"properties": [
+  {
+    "name": "app.config.keycloak.url",
+    "type": "java.lang.String",
+    "description": "A description for 'app.config.keycloak.url'"
+  },
+  {
+    "name": "app.config.keycloak.realm",
+    "type": "java.lang.String",
+    "description": "A description for 'app.config.keycloak.realm'"
+  }
+]}

@@ -8,9 +8,11 @@ import com.microservice.loja.usuario.usecase.model.response.UserDomainResponse.E
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class UserModelResponse {
 	
 	private String nome;

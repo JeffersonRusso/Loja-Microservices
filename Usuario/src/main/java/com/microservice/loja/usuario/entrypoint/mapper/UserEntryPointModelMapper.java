@@ -8,10 +8,12 @@ import com.microservice.loja.usuario.usecase.model.response.UserDomainResponse;
 
 public class UserEntryPointModelMapper {
 	
+	
 	public static UserModelResponse forModel(UserDomainResponse userDomainResponse) {
 		
 		List<UserModelResponse.Endereco> enderecoUser = new ArrayList<>();
 		
+		if(userDomainResponse.getEndereco() == null) {
 		userDomainResponse.getEndereco().forEach(endereco -> 
 		enderecoUser.add(
 				new UserModelResponse.Endereco(
@@ -22,13 +24,18 @@ public class UserEntryPointModelMapper {
 						endereco.getEstado(),
 						endereco.getNumero(),
 						endereco.getCep()))
-	);
-	
+				);
+		}
+		
 	return UserModelResponse.builder()
 			.nome(userDomainResponse.getNome())
 			.email(userDomainResponse.getEmail())
 			.idCarrinho(userDomainResponse.getIdCarrinho())
-			.endereco(enderecoUser)
+			.endereco(null)
 			.build();		
 	}
+
+	
+
+
 }

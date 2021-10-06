@@ -25,6 +25,9 @@ import lombok.Setter;
 @AllArgsConstructor
 public class UserDomainResponse {
 	
+	private String id;
+	private String identification;
+	private String authId;
 	private String nome;
 	private String email;
 	private String idCarrinho;
