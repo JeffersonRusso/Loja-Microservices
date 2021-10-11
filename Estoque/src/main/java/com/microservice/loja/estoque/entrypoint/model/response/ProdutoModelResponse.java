@@ -3,13 +3,18 @@ package com.microservice.loja.estoque.entrypoint.model.response;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * Mapeia um objeto Produto de retorno para camada EntryPoint.
@@ -21,13 +26,27 @@ import lombok.Getter;
 
 @Getter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @JsonInclude(Include.NON_EMPTY)
 @JsonNaming(SnakeCaseStrategy.class)
 public class ProdutoModelResponse {
 	
-	private Integer idProduto;
+	private String idProduto;
 	private String nome;
+	private String marca;
+	private String modelo;
+	private String corPrincipal;	
 	private BigDecimal preco;
-	private String imagem;
-
+	private Integer quantidade;
+	private String[] imagensNavegadorClassico;
+	private String[] imagensNavegadorMobile;
+	
+	
+	private String categoria;
+	
+	private String descricao;
+	private Dimencao dimencao;
+	private Avaliacao avaliacao;
+	private boolean ativo;
 }

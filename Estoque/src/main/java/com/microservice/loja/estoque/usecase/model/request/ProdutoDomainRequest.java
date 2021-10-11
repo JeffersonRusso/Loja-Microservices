@@ -13,5 +13,5 @@ import lombok.Setter;
 @Builder
 public class ProdutoDomainRequest {
 
-	private Integer idProduto;
+	private String idProduto;
 }
