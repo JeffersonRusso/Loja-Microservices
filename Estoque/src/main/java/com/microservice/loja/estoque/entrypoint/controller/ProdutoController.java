@@ -1,7 +1,6 @@
 package com.microservice.loja.estoque.entrypoint.controller;
 
 import java.util.ArrayList;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,37 +14,80 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
 
-import com.microservice.loja.estoque.dataprovider.repository.ProdutoRepository;
 import com.microservice.loja.estoque.entrypoint.Constants;
-import com.microservice.loja.estoque.entrypoint.mapper.ProdutoEntryPointDomainMapper;
-import com.microservice.loja.estoque.entrypoint.mapper.ProdutoEntryPointModelMapper;
+import com.microservice.loja.estoque.entrypoint.mapper.ProdutoEntryPointMapperRequest;
+import com.microservice.loja.estoque.entrypoint.mapper.ProdutoEntryPointMapperResponse;
+import com.microservice.loja.estoque.entrypoint.model.request.Filter;
 import com.microservice.loja.estoque.entrypoint.model.request.ProdutoModelRequest;
 import com.microservice.loja.estoque.entrypoint.model.response.ProdutoModelResponse;
 import com.microservice.loja.estoque.usecase.ProdutoUseCase;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestController
+@Slf4j
 @RequestMapping(value = Constants.URL)
 public class ProdutoController {
 	
 	private final ProdutoUseCase produtoUseCase;
+	private final ProdutoEntryPointMapperRequest requestMapper;
+	private final ProdutoEntryPointMapperResponse responseMapper;
 	
 	@Autowired
-	public ProdutoController(ProdutoUseCase produtoUseCase, ProdutoRepository pr) {
+	public ProdutoController
+			(ProdutoUseCase produtoUseCase,
+			ProdutoEntryPointMapperRequest requestMapper,
+			ProdutoEntryPointMapperResponse responseMapper )
+	{
 		this.produtoUseCase = produtoUseCase;
+		this.requestMapper = requestMapper;
+		this.responseMapper = responseMapper;
 	}
 	
 	@GetMapping (value = Constants.URL_PRODUTOS_POR_ID)
-	public ResponseEntity<ProdutoModelResponse> buscarProdutoPorId(@PathVariable Integer id) {
+	public ResponseEntity<ProdutoModelResponse> buscarProdutoPorId(@PathVariable String id) {
 		
-		ProdutoModelRequest produtoRequest = new ProdutoModelRequest();
-		produtoRequest.setIdProduto(id);
-		
-		return produtoUseCase.buscarProdutoPorId(ProdutoEntryPointDomainMapper.fromDomain(produtoRequest))
-				.map(ProdutoEntryPointModelMapper::fromModel)
+		return produtoUseCase.buscarProdutoPorId(requestMapper.convertToDomain(
+				ProdutoModelRequest
+				.builder()
+				.idProduto(id)
+				.build()))
+				.map(responseMapper::convertToModel)
 				.map(response -> new ResponseEntity<>(response, HttpStatus.OK))
 				.orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));
 	}
 	
+	@GetMapping (value = Constants.URL_PRODUTOS_POR_IDS, params = "ids")
+	public  ResponseEntity<List<ProdutoModelResponse>> buscarProdutosPorId(@RequestParam List<String> ids) {
+		
+		List<ProdutoModelRequest> produtosModelRequest = new ArrayList<>();
+		for (String id : ids) {
+			produtosModelRequest.add(ProdutoModelRequest.builder()
+					.idProduto(id)
+					.build());
+		}	
+		
+		Optional<List<ProdutoModelResponse>> listaProdutosModelResponse = produtoUseCase.buscarVariosProdutosPorIds(requestMapper.convertToDomainList(produtosModelRequest))
+				.map(responseMapper::convertToModelList);
+		 
+		return  listaProdutosModelResponse
+	        	.map(response -> new ResponseEntity<>(response, HttpStatus.OK))
+	        	.orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));
+	}
+	
+	@GetMapping (value = Constants.URL_PRODUTOS_POR_NOME)
+	public ResponseEntity<ProdutoModelResponse> buscarProdutosPorNome(@PathVariable String nome) {
+		
+		return produtoUseCase.buscarProdutoPorId(requestMapper.convertToDomain(
+				ProdutoModelRequest.builder()
+				.nome(nome)
+				.build()))
+				.map(responseMapper::convertToModel)
+				.map(response -> new ResponseEntity<>(response, HttpStatus.OK))
+				.orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));
+	}
+	
+	//CACHED
 	@GetMapping (value = Constants.URL_PRODUTOS_VITRINE)
 	public  ResponseEntity<List<ProdutoModelResponse>> buscarProdutosVitrine(  
 			@RequestParam(defaultValue = "0") Integer pageNo, 
@@ -54,27 +96,22 @@ public class ProdutoController {
 		
 		final List<ProdutoModelResponse> listaProdutosModelResponse = new ArrayList<>();
 		
-		listaProdutosModelResponse.addAll(ProdutoEntryPointModelMapper
-				.fromListModel(produtoUseCase.buscaProdutosVitrine(pageNo, pageSize, sortBy).get()));
+				produtoUseCase.buscaProdutosVitrine(pageNo, pageSize, sortBy)
+					.ifPresentOrElse( 
+						produtos  
+							-> 	listaProdutosModelResponse.addAll(
+									responseMapper.convertToModelList(produtos)),
+						()
+							-> 	log.error("lista de produtos vazia : {}",
+									listaProdutosModelResponse.size()));
         
         return Optional.of(listaProdutosModelResponse)
         		.map(response -> new ResponseEntity<>(response, HttpStatus.OK)).
         		orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));
 	}
 	
-	@GetMapping (value = Constants.URL_PRODUTOS_POR_IDS, params = "ids")
-	public  ResponseEntity<List<ProdutoModelResponse>> buscarProdutosVitrine(@RequestParam List<Integer> ids) {
-
-		List<ProdutoModelRequest> produtosModelRequest = new ArrayList<>();
-		for (Integer id : ids) {
-			produtosModelRequest.add(new ProdutoModelRequest(id));
-		}
-		
-		Optional<List<ProdutoModelResponse>> listaProdutosModelResponse = produtoUseCase.buscarVariosProdutosPorIds(ProdutoEntryPointDomainMapper.fromListDomain(produtosModelRequest))
-				.map(ProdutoEntryPointModelMapper::fromListModel);
-		 
-		return  listaProdutosModelResponse
-	        	.map(response -> new ResponseEntity<>(response, HttpStatus.OK))
-	        	.orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));
+	public  ResponseEntity<List<ProdutoModelResponse>> buscarPorEspecificacao(Filter filter) {
+		return null;
 	}
+	
 }

@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
@@ -19,4 +20,6 @@ public interface ProdutoGateway {
 	Optional<List<ProdutoDomainResponse>> buscaProdutosVitrine(Pageable paging);
 	
 	Optional<List<ProdutoDomainResponse>> buscarVariosProdutosPorIds(List<ProdutoDomainRequest> produtosDomainRequest);
+
+	Optional<List<ProdutoDomainResponse>> filtrarProdutos(Specification<ProdutoDomainRequest> especProdutoDomainRequest);
 }

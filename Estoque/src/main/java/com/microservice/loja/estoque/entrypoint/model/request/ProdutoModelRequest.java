@@ -2,15 +2,14 @@ package com.microservice.loja.estoque.entrypoint.model.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Setter
-@Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class ProdutoModelRequest {
-	private Integer idProduto;
+
+	private String idProduto;
+	private String nome;
 }
