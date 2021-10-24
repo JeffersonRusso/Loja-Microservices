@@ -1,5 +1,5 @@
 package com.microservice.loja.estoque.entrypoint.model.response;
 
-public class Dimencao {
+public class Dimensao {
 
 }

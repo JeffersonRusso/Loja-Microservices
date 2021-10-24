@@ -23,14 +23,9 @@ import com.microservice.loja.estoque.dataprovider.repository.entity.ProdutoEntit
 @Repository
 public interface ProdutoRepository extends PagingAndSortingRepository<ProdutoEntity, Integer>, JpaSpecificationExecutor<ProdutoEntity> {
 	
-	List<ProdutoEntity> findAll(Specification<ProdutoEntity> filtros); 
-	
-	Optional<ProdutoEntity> findByIdProduto(String id);
+	Optional<ProdutoEntity> findByIdProdutoAndAtivoTrue(String id);
 
 	List<ProdutoEntity> findAllByNomeLike(String nome);
 	
-//	List<ProdutoEntity>findAllByCategoryInAndPriceLessThanEqual(String nome, BigDecimal preco);
-	 
-	@Query(value = "select * from tb_produto where id_Produto in :ids", nativeQuery = true )
-	List<ProdutoEntity> findByIds(@Param("ids") List<String> postIdsList );
+	List<ProdutoEntity> findByIdProdutoIn(List<String> ids);
 }

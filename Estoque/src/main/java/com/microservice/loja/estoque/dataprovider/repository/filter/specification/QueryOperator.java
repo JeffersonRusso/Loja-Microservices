@@ -1,4 +1,4 @@
-package com.microservice.loja.estoque.dataprovider.filter.specification;
+package com.microservice.loja.estoque.dataprovider.repository.filter.specification;
 
 import lombok.Getter;
 

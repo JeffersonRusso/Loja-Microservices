@@ -9,18 +9,21 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-public enum Categoria {
-	ROUPA("ROUPA"),
-	SAPATO("SAPATO");
+public class Categoria {
 	
 	@Id
 	private String nome;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "categoria", cascade = CascadeType.ALL)
 	private Set<ProdutoEntity> products = new HashSet(); 
-	
-	private Categoria(String nome) {
+
+	public Categoria(String nome) {
 		this.nome = nome;
 	}
 	

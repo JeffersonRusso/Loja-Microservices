@@ -24,11 +24,13 @@ public class ProdutoDomainResponse {
 	private String corPrincipal;	
 	private BigDecimal preco;
 	private Integer quantidade;
+	private Integer quantidadeVendidos;
 	private String[] imagensNavegadorClassico;
 	private String[] imagensNavegadorMobile;
-	//
-	private String categoria;
 	private String descricao;
-	private Avaliacao avaliacao;
 	private boolean ativo;
+	//
+	private Categoria categoria;
+	private Avaliacao avaliacao;
+	private Dimensao dimensao;
 }

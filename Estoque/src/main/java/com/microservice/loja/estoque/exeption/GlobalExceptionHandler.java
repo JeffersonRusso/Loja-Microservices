@@ -1,4 +1,4 @@
-package com.microservice.loja.estoque.handle;
+package com.microservice.loja.estoque.exeption;
 
 import java.util.NoSuchElementException;
 

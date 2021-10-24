@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,16 +39,20 @@ public class ProdutoEntity {
 	private BigDecimal preco;
 	private Integer quantidade;
 	private String imagemMiniatura;
+	private Integer quantidadeVendidos;
 	private String[] imagensNavegadorClassico;
 	private String[] imagensNavegadorMobile;
 	private String descricao;
 	private boolean ativo;
 	
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "categoria_id", nullable = false)
 	private Categoria categoria;
 	
 	@Embedded
 	private Avaliacao avaliacao;
-
+	
+	@Embedded 
+	private Dimensao dimensao;
 }
