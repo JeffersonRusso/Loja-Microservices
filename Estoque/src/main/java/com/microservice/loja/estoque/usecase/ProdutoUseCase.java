@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import com.microservice.loja.estoque.usecase.gateway.ProdutoGateway;
+import com.microservice.loja.estoque.usecase.model.request.FilterUseCase;
 import com.microservice.loja.estoque.usecase.model.request.ProdutoDomainRequest;
 import com.microservice.loja.estoque.usecase.model.response.ProdutoDomainResponse;
 
@@ -38,7 +39,11 @@ public class ProdutoUseCase {
 		return this.produtoGateway.buscaProdutosVitrine(paging);
 	}
 	
-	public Optional<List<ProdutoDomainResponse>> buscarVariosProdutosPorIds(List<ProdutoDomainRequest> produtosDomainRequest) {
-		return this.produtoGateway.buscarVariosProdutosPorIds(produtosDomainRequest);
+	public Optional<List<ProdutoDomainResponse>> buscarProdutosPorIds(List<ProdutoDomainRequest> produtosDomainRequest) {
+		return this.produtoGateway.buscarProdutosPorIds(produtosDomainRequest);
+	}
+	
+	public Optional<List<ProdutoDomainResponse>> filtrarProdutos(List<FilterUseCase> filters) {
+		return this.produtoGateway.filtrarProdutos(filters);
 	}
 }

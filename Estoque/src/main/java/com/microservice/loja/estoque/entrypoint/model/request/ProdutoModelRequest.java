@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProdutoModelRequest {
-
+	
 	private String idProduto;
 	private String nome;
 }

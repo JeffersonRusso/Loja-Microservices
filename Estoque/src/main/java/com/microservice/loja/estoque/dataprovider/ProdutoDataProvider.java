@@ -1,7 +1,10 @@
 package com.microservice.loja.estoque.dataprovider;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +16,9 @@ import org.springframework.stereotype.Component;
 import com.microservice.loja.estoque.dataprovider.mapper.ProdutoDataProviderMapperResponse;
 import com.microservice.loja.estoque.dataprovider.repository.ProdutoRepository;
 import com.microservice.loja.estoque.dataprovider.repository.entity.ProdutoEntity;
+import com.microservice.loja.estoque.dataprovider.repository.filter.specification.CriteriaDynamicQuery;
 import com.microservice.loja.estoque.usecase.gateway.ProdutoGateway;
+import com.microservice.loja.estoque.usecase.model.request.FilterUseCase;
 import com.microservice.loja.estoque.usecase.model.request.ProdutoDomainRequest;
 import com.microservice.loja.estoque.usecase.model.response.ProdutoDomainResponse;
 
@@ -29,6 +34,7 @@ public class ProdutoDataProvider implements ProdutoGateway {
 	 * classe que consulta o repositorio de PRODUTOS
 	 */
 
+	private CriteriaDynamicQuery dynamicQuery;
 	private ProdutoRepository produtoRepository;
 	private final ProdutoDataProviderMapperResponse responseMapper;
 	
@@ -43,7 +49,7 @@ public class ProdutoDataProvider implements ProdutoGateway {
 	@Override
 	public Optional<ProdutoDomainResponse> buscarProdutoPorId(ProdutoDomainRequest produtoDomainRequest) {
 		
-		Optional<ProdutoEntity> produtoEntity = produtoRepository.findByIdProduto(produtoDomainRequest.getIdProduto());
+		Optional<ProdutoEntity> produtoEntity = produtoRepository.findByIdProdutoAndAtivoTrue(produtoDomainRequest.getIdProduto());
 		
 		return produtoEntity.isPresent() 
 				? Optional.of(responseMapper.convertToDomain(produtoEntity.get())) 
@@ -65,18 +71,37 @@ public class ProdutoDataProvider implements ProdutoGateway {
 				: Optional.empty(); 
 	}
 	
-	public Optional<List<ProdutoDomainResponse>> buscarVariosProdutosPorIds(List<ProdutoDomainRequest> produtosDomainRequest) {
+	@Override
+	public Optional<List<ProdutoDomainResponse>> buscarProdutosPorIds(List<ProdutoDomainRequest> produtosDomainRequest) {
 		
 		List<String> idsProdutos = produtosDomainRequest.stream().map(ProdutoDomainRequest::getIdProduto).collect(Collectors.toList());
 		
-		List<ProdutoDomainResponse> produtosDomainResponse = produtoRepository.findByIds(idsProdutos).stream().map(responseMapper::convertToDomain).collect(Collectors.toList());
+		List<ProdutoDomainResponse> produtosDomainResponse = produtoRepository.findByIdProdutoIn(idsProdutos).stream()
+				.map(responseMapper::convertToDomain).collect(Collectors.toList());
 		
 		return !produtosDomainResponse.isEmpty() 
 				? Optional.of(produtosDomainResponse) 
 				: Optional.empty(); 
 	}
 	
-	public Optional<List<ProdutoDomainResponse>> filtrarProdutos(Specification<ProdutoDomainRequest> especProdutoDomainRequest){
-		return null;
+	@Override
+	public Optional<List<ProdutoDomainResponse>> filtrarProdutos(List<FilterUseCase> filters){	
+		 
+		List<ProdutoDomainResponse> produtosDomainResponse = new ArrayList<>();
+		
+		Consumer<ProdutoEntity> addInDomainList = entities -> 
+			produtosDomainResponse.add(responseMapper.convertToDomain(entities));
+
+		if(filters.isEmpty()) {
+			produtosDomainResponse.addAll(
+	        		produtoRepository.findAll(dynamicQuery.getSpecificationFromFilters
+	        				(filters)).stream()
+	            				.map(responseMapper::convertToDomain).collect(Collectors.toList()));
+	    } else {
+	           produtoRepository.findAll().iterator().forEachRemaining(addInDomainList::accept);
+	    }
+		return !produtosDomainResponse.isEmpty() 
+				? Optional.of(produtosDomainResponse) 
+				: Optional.empty();
 	}
 }

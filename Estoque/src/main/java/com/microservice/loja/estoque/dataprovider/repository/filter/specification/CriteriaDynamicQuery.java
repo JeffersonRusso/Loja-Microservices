@@ -1,35 +1,33 @@
-package com.microservice.loja.estoque.dataprovider.filter.specification;
+package com.microservice.loja.estoque.dataprovider.repository.filter.specification;
+
+import static org.springframework.data.jpa.domain.Specification.where;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.criteria.Root;
-
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
-import com.microservice.loja.estoque.dataprovider.filter.*;
-
 import com.microservice.loja.estoque.dataprovider.repository.entity.ProdutoEntity;
+import com.microservice.loja.estoque.usecase.model.request.FilterUseCase;
 
 import lombok.RequiredArgsConstructor;
-
-import static org.springframework.data.jpa.domain.Specification.where;
 
 @Component
 @RequiredArgsConstructor
 public class CriteriaDynamicQuery {
 	
-	private Specification<ProdutoEntity> getSpecificationFromFilters(List<Filter> filter){
-		  Specification<ProdutoEntity> specification = 
+	public Specification<ProdutoEntity> getSpecificationFromFilters(List<FilterUseCase> filter){
+		Specification<ProdutoEntity> specification = 
 		            where(createSpecification(filter.remove(0)));
-		  for (Filter input : filter) {
+		
+		  for (FilterUseCase input : filter) {
 		    specification = specification.and(createSpecification(input));
 		  }  
 		  return specification; 
 		}
 	
-	private Specification<ProdutoEntity> createSpecification(Filter input) {
+	private Specification<ProdutoEntity> createSpecification(FilterUseCase input) {
 		switch (input.getOperator()) {
 
 		case EQUALS:
@@ -72,6 +70,14 @@ public class CriteriaDynamicQuery {
 		}
 	}
 
+	private Object castToRequiredType(Class fieldType, List<String> value) {
+		List<Object> lists = new ArrayList();
+		for (String s : value) {
+			lists.add(castToRequiredType(fieldType, s));
+		}
+		return lists;
+	}
+	
 	private Object castToRequiredType(Class fieldType, String value) {
 		if (fieldType.isAssignableFrom(Double.class)) {
 			return Double.valueOf(value);
@@ -81,13 +87,5 @@ public class CriteriaDynamicQuery {
 			return Enum.valueOf(fieldType, value);
 		}
 		return null;
-	}
-
-	private Object castToRequiredType(Class fieldType, List<String> value) {
-		List<Object> lists = new ArrayList();
-		for (String s : value) {
-			lists.add(castToRequiredType(fieldType, s));
-		}
-		return lists;
 	}
 }
